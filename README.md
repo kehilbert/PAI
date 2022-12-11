@@ -20,6 +20,7 @@ Missing Values: this script uses MICE to impute missing for dimensional features
 
     
 ## Script preparation:
+Make sure all needed requirements for this script are installed by running "pip install -r "requirements.txt". 
 Name your model in options_overall['name_model'] - this will be used to name all outputs by the script  
 Set the number of total iterations under options_overall['number_iterations']  
 Set the of folds for the k-fold under options_overall['number_folds']  
