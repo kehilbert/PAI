@@ -88,9 +88,7 @@ OPTIONS_OVERALL['name_groups_id'] = 'groups_id.txt'
 
 
 def create_folders():
-
-    #create folders for overall results and results per iteration in workind directory
-    #check if folder exists, if so abort script, as running again would lead to wrong results (new results are appended but do not overwrite previous results) -> if you make changes to this script, change the model name before re-running
+    """Folder for results are created, in case the folder already exists the script stops to avoid wrong results """
     if not os.path.exists(os.path.join(PATH_WORKINGDIRECTORY,OPTIONS_OVERALL['name_model'])):
         os.makedirs(os.path.join(PATH_WORKINGDIRECTORY,OPTIONS_OVERALL['name_model']))
         os.makedirs(os.path.join(PATH_WORKINGDIRECTORY,OPTIONS_OVERALL['name_model'],'accuracy'))
@@ -101,7 +99,7 @@ def create_folders():
 
 
 def do_iterations(numrun):
-
+    """Runs a whole iteration of the sklearn pipeline and following calculation of the PAI score"""
     global PATH_WORKINGDIRECTORY, OPTIONS_OVERALL
 
     random_state_seed = numrun
@@ -317,6 +315,7 @@ def do_iterations(numrun):
 
     # Calculate Cohen´s d
     def cohens_d(x,y):
+        """Cohens D is calculated"""
         d = (np.mean(x) - np.mean(y)) / math.sqrt((np.std(x) ** 2 + np.std(y) ** 2)/2)
         return d
     results_all_cv_sum["cohens_d_tx_alternative1"] = cohens_d(x = results_all_cvs["obs_outcomes_optimal_all_cvs_tx_alternative1"],y = results_all_cvs["obs_outcomes_nonoptimal_all_cvs_tx_alternative1"])
@@ -343,7 +342,7 @@ def do_iterations(numrun):
 
 
 def save_results(results_dict_func):
-
+    """Results are saved for the individual round in the defined working directory."""
     for key in results_dict_func:
 
         save_option = os.path.join(PATH_WORKINGDIRECTORY,OPTIONS_OVERALL['name_model'],'individual_rounds',(OPTIONS_OVERALL['name_model'] + '_per_iteration_' + str(key) + '.txt'))
@@ -354,7 +353,7 @@ def save_results(results_dict_func):
 
 
 def save_features(*argv):
-
+    """Features are saved for the individual rounds in the defined working directory"""
     varnames=list(('feature_importances_all_cv_sum_tx_alternative1','feature_importances_all_cv_sum_tx_alternative0','feature_importances_all_cv_sum_NaNs_tx_alternative1','feature_importances_all_cv_sum_NaNs_tx_alternative0','feature_importances_all_cv_sum_nonzero_tx_alternative1','feature_importances_all_cv_sum_nonzero_tx_alternative0'))
     counter=0
 
@@ -370,7 +369,6 @@ def save_features(*argv):
 
 
 def exclude_features(X_train, X_test):
-
     """
     A two-step procedure to exclude features
 
@@ -478,7 +476,7 @@ def exclude_features(X_train, X_test):
 
 
 def mice_mode_imputation(X_train, X_test, random_state_seed):
-
+    """Missing Values are replaced with mode values for binary features and iterative MICE imputations for dimensional features"""
     # Binary features
     imp_mode = SimpleImputer(missing_values=777777, strategy='most_frequent')
     imp_mode.fit(X_train)
@@ -497,8 +495,7 @@ def mice_mode_imputation(X_train, X_test, random_state_seed):
 
 
 def z_scaling(X_train_imputed, X_test_imputed):
-
-    #Only dimensional features are rescaled
+    """Dimensional features are rescaled using a standard Scaler"""
     scaler=ColumnTransformer([("standard", preprocessing.StandardScaler(copy=True, with_mean=True, with_std=True),
                                list(((np.sort(X_train_imputed,axis=0)[1:] != np.sort(X_train_imputed,axis=0)[:-1]).sum(axis=0)+1)>2))],
                                remainder='passthrough')
@@ -509,7 +506,7 @@ def z_scaling(X_train_imputed, X_test_imputed):
 
 
 def result_metrics(y_prediction):
-
+    """Result metrics are calculated and collected in a dictionary"""
     results_metrics = {}
     ## Correlation
     correlation = np.corrcoef(y_prediction['y_pred_factual'],y_prediction['y_true'])[0,1]
@@ -559,7 +556,7 @@ def result_metrics(y_prediction):
 
 
 def aggregate_iterations():
-
+    """The results of the single iterations are loaded, aggregated (means, max and min and std values) and saved."""
     global PATH_WORKINGDIRECTORY, OPTIONS_OVERALL
 
     varnames=list(('correlation_all_cv_sum_all','RMSE_all_cv_sum_all','MAE_all_cv_sum_all',
@@ -667,6 +664,7 @@ def aggregate_iterations():
 
 
 def reminder():
+    """Most important prerequisites to execute this code are printed."""
     print("Are data read-in as tab-separated text?")
     print("Have the values 777777, 999999 been assigned to NAs / missing?")
     print("Have you provided the paths to directories?"),
