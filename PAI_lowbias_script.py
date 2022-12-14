@@ -77,10 +77,10 @@ Refraining from LOO-CV and using a repeated 5-fold stratified train-test split -
 start_time = time.time()
 mkl.set_num_threads(1)
 
-PATH_WORKINGDIRECTORY = 'Y:\\Projekte_Hilbert\\Kevin_PAI\\Protect_AD\\Analyse\\test_script_publication\\' #windows-version
+PATH_WORKINGDIRECTORY = 'your_path\\' 
 
-OPTIONS_OVERALL = {'name_model': 'PAI_100iters_5fold_ridge_CM_KH_CM_KH_CM_KH'}
-OPTIONS_OVERALL['number_iterations'] = 3
+OPTIONS_OVERALL = {'name_model': 'name_your_model'}
+OPTIONS_OVERALL['number_iterations'] = 100
 OPTIONS_OVERALL['number_folds'] = 5
 OPTIONS_OVERALL['name_features'] = 'features.txt'
 OPTIONS_OVERALL['name_labels'] = 'labels.txt'
