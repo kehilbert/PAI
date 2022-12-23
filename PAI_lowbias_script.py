@@ -11,6 +11,7 @@ import mkl
 import multiprocessing
 import os
 import sklearn
+import statistics
 import sys
 import time
 import warnings
@@ -316,7 +317,7 @@ def do_iterations(numrun):
     # Calculate Cohen´s d
     def cohens_d(x,y):
         """Cohens D is calculated"""
-        d = (np.mean(x) - np.mean(y)) / math.sqrt((np.std(x) ** 2 + np.std(y) ** 2)/2)
+        d = (statistics.mean(x) - statistics.mean(y)) / math.sqrt((statistics.stdev(x) ** 2 + statistics.stdev(y) ** 2)/2)
         return d
     results_all_cv_sum["cohens_d_tx_alternative1"] = cohens_d(x = results_all_cvs["obs_outcomes_optimal_all_cvs_tx_alternative1"],y = results_all_cvs["obs_outcomes_nonoptimal_all_cvs_tx_alternative1"])
     results_all_cv_sum["cohens_d_tx_alternative0"] = cohens_d(x = results_all_cvs["obs_outcomes_optimal_all_cvs_tx_alternative0"],y = results_all_cvs["obs_outcomes_nonoptimal_all_cvs_tx_alternative0"])
